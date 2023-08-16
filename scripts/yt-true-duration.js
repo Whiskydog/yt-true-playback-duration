@@ -1,12 +1,3 @@
-const video = document.querySelector("video");
-const durationSpan = document.querySelector(".ytp-time-duration").parentElement;
-const trueDurationSpan = document.createElement("span");
-
-function getTrueDurationString() {
-  const trueDuration = video.duration / video.playbackRate;
-  return durationToString(trueDuration);
-}
-
 function durationToString(duration) {
   let timeLeft = duration;
   const hours = Math.trunc(timeLeft / 3600);
@@ -23,15 +14,33 @@ function durationToString(duration) {
   return str;
 }
 
-function updateTrueDurationSpan() {
-  trueDurationSpan.textContent =
-    video.playbackRate === 1 ? "" : ` (${getTrueDurationString()})`;
+function getTrueDurationString(video) {
+  const trueDuration = video.duration / video.playbackRate;
+  return durationToString(trueDuration);
 }
 
-video.onratechange = () => {
-  updateTrueDurationSpan();
-};
+function updateTrueDuration(video, trueDuration) {
+  trueDuration.textContent =
+    video.playbackRate === 1 ? "" : ` (${getTrueDurationString(video)})`;
+  console.log("[YT True Duration] True duration updated!");
+}
 
-updateTrueDurationSpan();
-durationSpan.appendChild(trueDurationSpan);
-console.log("YT True Duration loaded!");
+console.log("[YT True Duration] Loaded!");
+document.addEventListener("yt-navigate-finish", () => {
+  if (document.querySelector(".ytp-true-duration")) return;
+
+  let video = document.querySelector("video");
+  let trueDuration = document.createElement("span");
+
+  video.onratechange = () => {
+    updateTrueDuration(video, trueDuration);
+  };
+  video.onloadedmetadata = () => {
+    updateTrueDuration(video, trueDuration);
+  };
+
+  let timeDisplay = document.querySelector(".ytp-time-duration").parentElement;
+  trueDuration.className = "ytp-true-duration";
+  timeDisplay.appendChild(trueDuration);
+  console.log("[YT True Duration] True duration element appended!");
+});
