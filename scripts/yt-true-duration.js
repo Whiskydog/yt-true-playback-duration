@@ -27,7 +27,7 @@ function updateTrueDuration(video, trueDuration) {
 
 console.log("[YT True Duration] Loaded!");
 document.addEventListener("yt-navigate-finish", () => {
-  if (document.querySelector(".ytp-true-duration")) return;
+  if (document.querySelector("#ytp-true-duration")) return;
 
   let video = document.querySelector("video");
   let trueDuration = document.createElement("span");
@@ -40,7 +40,8 @@ document.addEventListener("yt-navigate-finish", () => {
   };
 
   let timeDisplay = document.querySelector(".ytp-time-duration").parentElement;
-  trueDuration.className = "ytp-true-duration";
+  trueDuration.id = "ytp-true-duration";
+  trueDuration.className = "ytp-time-duration";
   timeDisplay.appendChild(trueDuration);
   console.log("[YT True Duration] True duration element appended!");
 });
