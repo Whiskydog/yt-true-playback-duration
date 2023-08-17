@@ -27,6 +27,7 @@ function updateTrueDuration(video, trueDuration) {
 
 console.log("[YT True Duration] Loaded!");
 document.addEventListener("yt-navigate-finish", () => {
+  if (!document.URL.includes("watch")) return;
   if (document.querySelector("#ytp-true-duration")) return;
 
   let video = document.querySelector("video");
